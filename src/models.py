@@ -1,10 +1,9 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Float
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import create_engine
 from eralchemy2 import render_er
-from sqlalchemy.types import Boolean, Date, DateTime, Float, Integer, Text, Time, Interval
 
 Base = declarative_base()
 
