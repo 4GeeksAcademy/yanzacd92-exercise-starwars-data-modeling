@@ -65,8 +65,8 @@ class Follower(Base):
     __tablename__ = 'follower'
     # Here we define columns for the table follower
     # Notice that each column is also a normal Python instance attribute.
-    user_from_id = Column(Integer, ForeignKey('user.id'))
-    user_to_id = Column(Integer, ForeignKey('user.id'))
+    user_from_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user_to_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
 
     def to_dict(self):
         return {}
