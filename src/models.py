@@ -10,15 +10,11 @@ Base = declarative_base()
 
 class Person(Base):
     __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
 
 class Address(Base):
     __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     street_name = Column(String(250))
     street_number = Column(String(250))
@@ -28,12 +24,9 @@ class Address(Base):
 
 class People(Base):
     __tablename__ = 'people'
-    # Here we define columns for the table people
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     birth_year = Column(String(50))
     eye_color = Column(String(50))
-    # film_id = Column(Integer, ForeignKey('films.id'))
     gender = Column(String(50))
     hair_color = Column(String(50))
     height = Column(Float)
@@ -43,31 +36,41 @@ class People(Base):
     skin_color = Column(String(50))
     created = Column(DateTime)
     edited = Column(DateTime)
-    # specie_id = Column(Integer, ForeignKey('species.id'))
-    # vehicle_id = Column(Integer, ForeignKey('vehicles.id'))
 
 class Films(Base):
     __tablename__ = 'films'
-    # Here we define columns for the table films
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     title = Column(String(250))
     opening_crawl = Column(String(250))
     director = Column(String(100))
     producer = Column(String(100))
     release_date = Column(DateTime)
-    # specie_id = Column(Integer, ForeignKey('species.id'))
-    # vehicle_id = Column(Integer, ForeignKey('vehicles.id'))
-    # character_id = Column(Integer, ForeignKey('people.id'))
-    # planet_id = Column(Integer, ForeignKey('planets.id'))
+    url = Column(String(250))
+    created = Column(DateTime)
+    edited = Column(DateTime)
+
+class Startships(Base):
+    __tablename__ = 'startships'
+    id = Column(Integer, primary_key=True)
+    name  = Column(String(250))
+    model  = Column(String(250))
+    starship_class  = Column(String(100))
+    manufacturer  = Column(String(100))
+    cost_in_credits  = Column(DateTime)
+    length = Column(Float)
+    crew = Column(Float)
+    passengers = Column(Integer)
+    max_atmosphering_speed = Column(String(50))
+    hyperdrive_rating = Column(Float)
+    mglt = Column(String(50))
+    cargo_capacity = Column(Integer)
+    consumables = Column(String(50))
     url = Column(String(250))
     created = Column(DateTime)
     edited = Column(DateTime)
 
 class Vehicles(Base):
     __tablename__ = 'vehicles'
-    # Here we define columns for the table vehicles
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(200))
     model = Column(String(50))
@@ -81,15 +84,11 @@ class Vehicles(Base):
     cargo_capacity = Column(Integer)
     consumables = Column(String(200))
     url = Column(String(250))
-    # film_id = Column(Integer, ForeignKey('films.id'))
-    # pilot_id = Column(Integer, ForeignKey('people.id'))
     created = Column(DateTime)
     edited = Column(DateTime)
 
 class Species(Base):
     __tablename__ = 'species'
-    # Here we define columns for the table species
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(250))
     classification = Column(String(50))
@@ -101,16 +100,12 @@ class Species(Base):
     skin_colors = Column(String(50))
     language = Column(String(50))
     homeworld_id = Column(Integer, ForeignKey('planets.id'))
-    # character_id = Column(Integer, ForeignKey('people.id'))
-    # film_id = Column(Integer, ForeignKey('films.id'))
     url = Column(String(250))
     created = Column(DateTime)
     edited = Column(DateTime)
 
 class Planets(Base):
     __tablename__ = 'planets'
-    # Here we define columns for the table planets
-    # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(250))
     diameter = Column(Float)
@@ -122,40 +117,57 @@ class Planets(Base):
     terrain = Column(String(50))
     surface_water = Column(Integer)
     residents_id = Column(Integer, ForeignKey('people.id'))
-    # film_id = Column(Integer, ForeignKey('films.id'))
     url = Column(String(250))
     created = Column(DateTime)
     edited = Column(DateTime)
 
+class Cast(Base):
+    __tablename__ = 'cast'
+    id = Column(Integer, primary_key=True)
+    film_id = Column(Integer, ForeignKey('films.id'))
+    film = relationship("Films", backref="cast")
+    people_id = Column(Integer, ForeignKey('people.id'))
+    people = relationship("People", backref="cast")
+
 class PeopleVehicles(Base):
     __tablename__ = 'peoplevehicles'
     people_id = Column(Integer, ForeignKey('people.id'), primary_key=True)
-    vehicle_id = Column(Integer, ForeignKey('vehicle.id'), primary_key=True)
+    vehicles_id = Column(Integer, ForeignKey('vehicle.id'), primary_key=True)
 
 class PeopleSpecies(Base):
     __tablename__ = 'peoplespecies'
     people_id = Column(Integer, ForeignKey('people.id'), primary_key=True)
-    specie_id = Column(Integer, ForeignKey('species.id'), primary_key=True)
+    species_id = Column(Integer, ForeignKey('species.id'), primary_key=True)
 
 class PeopleFilms(Base):
     __tablename__ = 'peoplefilms'
     people_id = Column(Integer, ForeignKey('people.id'), primary_key=True)
-    film_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
+    films_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
+
+class PeopleStarship(Base):
+    __tablename__ = 'peoplestartship'
+    people_id = Column(Integer, ForeignKey('people.id'), primary_key=True)
+    startships_id = Column(Integer, ForeignKey('startships.id'), primary_key=True)
 
 class FilmsPlanets(Base):
     __tablename__ = 'filmsplanets'
-    people_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
-    film_id = Column(Integer, ForeignKey('planets.id'), primary_key=True)
+    films_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
+    planets_id = Column(Integer, ForeignKey('planets.id'), primary_key=True)
 
 class FilmsSpecies(Base):
     __tablename__ = 'filmsspecies'
-    people_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
-    film_id = Column(Integer, ForeignKey('species.id'), primary_key=True)
+    film_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
+    species_id = Column(Integer, ForeignKey('species.id'), primary_key=True)
 
 class FilmsVehicles(Base):
     __tablename__ = 'filmsvehicles'
-    people_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
-    film_id = Column(Integer, ForeignKey('vehicles.id'), primary_key=True)
+    film_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
+    vehicles_id = Column(Integer, ForeignKey('vehicles.id'), primary_key=True)
+
+class FilmsStartships(Base):
+    __tablename__ = 'filmsstarships'
+    film_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
+    startships_id = Column(Integer, ForeignKey('startships.id'), primary_key=True)
 
     def to_dict(self):
         return {}
