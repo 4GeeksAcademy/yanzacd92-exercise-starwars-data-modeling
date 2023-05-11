@@ -7,7 +7,7 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
+""" class Person(Base):
     __tablename__ = 'person'
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
@@ -19,7 +19,7 @@ class Address(Base):
     street_number = Column(String(250))
     post_code = Column(String(250), nullable=False)
     person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    person = relationship(Person) """
 
 class People(Base):
     __tablename__ = 'people'
